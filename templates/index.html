@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-3 h3">{% block title %}Dashboard{% endblock %}</h2>
+<div class="card p-3">
+	<div class="card-header text-center">
+		<h5 class="card-title mb-0">Analisis Sentimen Pelanggan Aplikasi Maxim pada Google Play Store</h5>
+	</div>
+	<div class="card-body text-center">
+		<img class="mb-3" src="{{ url_for('static', filename='img/logo_umby.png') }}" width="300px">
+		<p class="card-text">Deswita Eka Yanti</p>
+		<p class="card-text">201210102</p>
+	</div>
+</div>
+{% endblock %}

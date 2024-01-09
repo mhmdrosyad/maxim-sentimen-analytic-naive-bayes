@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-3 h3">{% block title %}Hasil Analisis{% endblock %}</h2>
+<div class="card p-3">
+	<div class="card-header text-center">
+		<h5 class="card-title mb-0">Analisis Sentimen Pelanggan Aplikasi Maxim pada Google Play Store</h5>
+	</div>
+	<div class="card-body text-center">
+        {% if accuracy %}
+            <div class="mt-4">
+                <h2>Akurasi Model</h2>
+                <p>{{ accuracy }}</p>
+            </div>
+        {% endif %}
+
+        {% if classification_report %}
+            <div class="mt-4">
+                <h2>Classification Report</h2>
+                <pre>{{ classification_report }}</pre>
+            </div>
+        {% endif %}
+
+        {% if test_results %}
+        <div class="mt-4">
+            <h2>Hasil Prediksi pada Data Uji</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data Uji</th>
+                        <th>Label Asli</th>
+                        <th>Hasil Prediksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for test_data, prediction, true_label in test_results %}
+                        <tr>
+                            <td>{{ test_data }}</td>
+                            <td>{{ true_label }}</td>
+                            <td>{{ prediction }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    
+	</div>
+</div>
+{% endblock %}
