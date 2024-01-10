@@ -2,33 +2,185 @@
 
 {% block content %}
 <h2 class="mb-3 h3">{% block title %}Hasil Analisis{% endblock %}</h2>
+<div class="row">
+    <div class="col-xl-6 col-xxl-8 d-flex">
+        <div class="w-100">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Review Positif</h5>
+                                </div>
+
+                                <div class="col-auto">
+                                    <div class="stat text-primary">
+                                        <i class="align-middle" data-feather="plus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <h1 class="mt-1 mb-3">{{count_pos}}</h1>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Sentimen Positif</h5>
+                                </div>
+
+                            </div>
+                            <img src="data:image/png;base64,{{ img_pos }}" alt="WordCloud Positif" width="350px">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Review Negaitf</h5>
+                                </div>
+
+                                <div class="col-auto">
+                                    <div class="stat text-primary">
+                                        <i class="align-middle" data-feather="minus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <h1 class="mt-1 mb-3">{{count_neg}}</h1>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Sentimen Negatif</h5>
+                                </div>
+
+                            </div>
+                            <img src="data:image/png;base64,{{ img_neg }}" alt="WordCloud Negatif" width="350px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6 col-xxl-4">
+        <div class="card flex-fill w-100">
+            <div class="card-header">
+
+                <h5 class="card-title mb-0">Hasil Analisis</h5>
+            </div>
+            <div class="card-body py-3">
+                <div class="chart chart-sm">
+                    <canvas id="sentimentCountChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col d-flex">
+        <div class="w-100">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Plot Term Kata-Kata - Positif</h5>
+                                </div>
+
+                            </div>
+                            <canvas id="wordFreqPosChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Plot Term Kata-Kata - Negatif</h5>
+                                </div>
+                            </div>
+                            <canvas id="wordFreqNegChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col d-flex">
+        <div class="w-100">
+            <div class="row">
+                <div class="col-sm-6 d-grid">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Akurasi Model</h5>
+                                </div>
+
+                            </div>
+                            {% if accuracy %}
+                            <div class="mt-4">
+                                <h1>{{ accuracy }}%</h1>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mt-0">
+                                    <h5 class="card-title">Classification Report</h5>
+                                </div>
+                            </div>
+                            {% if classification_report %}
+                            <div class="mt-4">
+                                <pre>{{ classification_report }}</pre>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
 <div class="card p-3">
 	<div class="card-header text-center">
 		<h5 class="card-title mb-0">Analisis Sentimen Pelanggan Aplikasi Maxim pada Google Play Store</h5>
 	</div>
-	<div class="card-body text-center">
-        {% if accuracy %}
-            <div class="mt-4">
-                <h2>Akurasi Model</h2>
-                <p>{{ accuracy }}</p>
-            </div>
-        {% endif %}
-
-        {% if classification_report %}
-            <div class="mt-4">
-                <h2>Classification Report</h2>
-                <pre>{{ classification_report }}</pre>
-            </div>
-        {% endif %}
+	<div class="card-body">
 
         {% if test_results %}
         <div class="mt-4">
-            <h2>Hasil Prediksi pada Data Uji</h2>
-            <table class="table">
+            <div class="mb-3">
+                <label for="filterLabel">Filter Review:</label>
+                <select id="filterLabel" class="form-select">
+                    <option value="all">All</option>
+                    <option value="positif">Positif</option>
+                    <option value="negatif">Negatif</option>
+                </select>
+            </div>
+            <table id="resultTable" class="table bordered">
                 <thead>
                     <tr>
                         <th>Data Uji</th>
-                        <th>Label Asli</th>
                         <th>Hasil Prediksi</th>
                     </tr>
                 </thead>
@@ -36,15 +188,116 @@
                     {% for test_data, prediction, true_label in test_results %}
                         <tr>
                             <td>{{ test_data }}</td>
-                            <td>{{ true_label }}</td>
                             <td>{{ prediction }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-    {% endif %}
+        {% endif %}
     
 	</div>
 </div>
+<script>
+    // Fungsi untuk membuat grafik bar dengan Chart.js
+    function createBarChart(canvasId, labels, data, title) {
+        var ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: title,
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Ambil data plot term kata-kata positif dan negatif dari Flask
+    var wordFreqPos = {{ word_freq_pos|tojson|safe }};
+    var wordFreqNeg = {{ word_freq_neg|tojson|safe }};
+
+    console.log(wordFreqPos)
+
+    var labelsPos = wordFreqPos.map(item => item.content);
+    var dataPos = wordFreqPos.map(item => item.count);
+    var labelsNeg = wordFreqNeg.map(item => item.content);
+    var dataNeg = wordFreqNeg.map(item => item.count);
+
+    // Buat grafik dengan data positif
+    createBarChart('wordFreqPosChart', labelsPos, dataPos, 'Positif');
+
+    // Buat grafik dengan data negatif
+    createBarChart('wordFreqNegChart', labelsNeg, dataNeg, 'Negatif');
+</script>
+<script>
+    // Fungsi untuk membuat grafik jumlah sentimen Chart.js
+    function createPieChart(canvasId, labels, data) {
+        var ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                    borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                    borderWidth: 1
+                }]
+            }
+        });
+    }
+
+    // Ambil data jumlah sentimen dari Flask dan buat grafik
+    var sentimentCount = JSON.parse('{{ sentiment_count|tojson|safe }}');
+    var labels = Object.keys(sentimentCount);
+    var data = Object.values(sentimentCount);
+
+    createPieChart('sentimentCountChart', labels, data);
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var filterLabel = document.getElementById('filterLabel');
+        var resultTable = document.getElementById('resultTable');
+
+        filterLabel.addEventListener('change', function () {
+            var selectedLabel = filterLabel.value;
+
+            // Ambil semua baris dalam tabel
+            var rows = resultTable.getElementsByTagName('tr');
+
+            // Semua baris ditampilkan
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].style.display = '';
+            }
+
+            // Jika yang dipilih bukan 'all', sembunyikan baris yang tidak sesuai
+            if (selectedLabel !== 'all') {
+                for (var i = 1; i < rows.length; i++) {
+                    var labelCell = rows[i].lastElementChild; // Ambil sel terakhir (kolom label)
+                    var labelValue = labelCell.textContent.toLowerCase();
+                    
+                    if (labelValue !== selectedLabel) {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}
